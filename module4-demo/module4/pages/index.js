@@ -1,48 +1,23 @@
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import { getFeaturedEvents } from "../dummy-data";
-import EventList from "../components/events/event-list";
-import Link from "next/link";
+import { getFeaturedEvents } from '../helpers/api-util';
+import EventList from '../components/events/event-list';
 
-
-export default function Home() {
-  const featuredEvents = getFeaturedEvents();
-  console.log(featuredEvents);
+function HomePage(props) {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Module4</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}>
-        
-
-       
-        <div>
-          
-        </div>
-        <div className={styles.grid}>
-         
-
-          
-         
-
-         
-          <div styles="display:flex">
-            <EventList items={featuredEvents} />
-          </div>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+    <div>
+      <EventList items={props.events} />
     </div>
   );
 }
+
+export async function getStaticProps() {
+  const featuredEvents = await getFeaturedEvents();
+
+  return {
+    props: {
+      events: featuredEvents
+    },
+    revalidate: 1800
+  }
+}
+
+export default HomePage;
